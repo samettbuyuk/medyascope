@@ -273,28 +273,40 @@ export default function App() {
     setIsGeneratingPDF(true);
     try {
       const element = reportRef.current;
+      
+      // html2canvas performs best when capturing exact element bounds without viewport/scrolling side-effects
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 3, // Premium quality (ultra high sharpness / print-ready 300 DPI)
         useCORS: true,
         logging: false,
         backgroundColor: "#ffffff",
         scrollX: 0,
         scrollY: 0,
-        width: 794,
-        height: 1123
+        windowWidth: 794,
+        windowHeight: 1123,
+        onclone: (clonedDoc) => {
+          // Additional safety: make sure the cloned element contains clear sizes and visible formatting
+          const clonedElement = clonedDoc.querySelector("[ref='reportRef']") as HTMLElement || clonedDoc.getElementById("pdf-report-template");
+          if (clonedElement) {
+            clonedElement.style.transform = "none";
+            clonedElement.style.position = "static";
+            clonedElement.style.display = "flex";
+          }
+        }
       });
       
-      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
-        format: "a4"
+        format: "a4",
+        compress: true
       });
       
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       
-      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
       pdf.save(`medyascope-analiz-raporu-${Date.now()}.pdf`);
     } catch (error) {
       console.error("PDF generation failed:", error);
@@ -1215,33 +1227,44 @@ export default function App() {
             top: 0, 
             left: 0, 
             width: "794px", 
+            minWidth: "794px",
             height: "1123px", 
+            minHeight: "1123px",
             zIndex: -9999, 
             pointerEvents: "none",
-            visibility: "visible"
+            visibility: "visible",
+            overflow: "hidden"
           }} 
           aria-hidden="true"
         >
           <div 
             ref={reportRef}
-            className="w-[794px] h-[1123px] bg-white text-slate-900 p-10 flex flex-col justify-between font-sans relative"
-            style={{ boxSizing: "border-box" }}
+            id="pdf-report-template"
+            className="bg-white text-slate-900 p-12 flex flex-col justify-between font-sans relative"
+            style={{ 
+              boxSizing: "border-box", 
+              width: "794px", 
+              minWidth: "794px", 
+              height: "1123px", 
+              minHeight: "1123px",
+              fontFamily: "Inter, system-ui, -apple-system, sans-serif"
+            }}
           >
             {/* Header branding */}
             <div>
-              <div className="flex justify-between items-start pb-4 border-b-2 border-purple-600/30">
+              <div className="flex justify-between items-start pb-5 border-b-2 border-purple-600/40">
                 <div>
-                  <h1 className="text-2xl font-black text-purple-950 font-display tracking-tight flex items-center gap-1.5">
+                  <h1 className="text-2xl font-black text-purple-950 font-display tracking-tight flex items-center gap-1.5" style={{ letterSpacing: "-0.5px" }}>
                     <span>Medyascope</span>
                     <span className="text-purple-600">.AI</span>
                   </h1>
-                  <p className="text-[10px] text-purple-600/80 uppercase font-bold tracking-widest font-mono mt-0.5">
-                    Sosyal Medya Güvenilirlik ve Teşhis Raporu
+                  <p className="text-[10px] text-purple-600/90 uppercase font-black tracking-widest font-mono mt-1">
+                    SOSYAL MEDYA GÜVENİLİRLİK VE TEŞHİS RAPORU
                   </p>
                 </div>
                 <div className="text-right">
                   <div className="text-[10px] text-slate-500 font-mono tracking-wider">RAPOR NO: #{(inputText.length * 13) % 9999 + 1000}</div>
-                  <div className="text-xs font-bold text-slate-700 mt-0.5 font-mono">
+                  <div className="text-xs font-bold text-slate-800 mt-1 font-mono">
                     {new Date().toLocaleDateString("tr-TR", {
                       year: "numeric",
                       month: "long",
@@ -1254,23 +1277,23 @@ export default function App() {
               </div>
 
               {/* Grid with Platform and Status */}
-              <div className="grid grid-cols-4 gap-4 bg-slate-50 border border-slate-100 p-4 rounded-xl mt-5">
+              <div className="grid grid-cols-4 gap-4 bg-slate-50 border border-slate-200/60 p-4 rounded-xl mt-5">
                 <div>
-                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5">Analiz Platformu</span>
-                  <span className="text-xs font-black text-purple-950 font-sans">{selectedPlatform === "X" ? "X (Twitter)" : selectedPlatform}</span>
+                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5 font-bold">Analiz Platformu</span>
+                  <span className="text-sm font-black text-purple-950 font-sans">{selectedPlatform === "X" ? "X (Twitter)" : selectedPlatform}</span>
                 </div>
                 <div>
-                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5">Örnek Metin Uzunluğu</span>
-                  <span className="text-xs font-black text-slate-800 font-sans">{inputText.length} Karakter</span>
+                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5 font-bold">Metin Uzunluğu</span>
+                  <span className="text-sm font-black text-slate-800 font-sans">{inputText.length} Karakter</span>
                 </div>
                 <div>
-                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5">Siber Denetçi</span>
-                  <span className="text-xs font-black text-slate-800 font-sans">Medyascope Gemini v3.5</span>
+                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5 font-bold">Siber Denetçi</span>
+                  <span className="text-sm font-black text-slate-800 font-sans">Medyascope Gemini v3.5</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5">Durumu</span>
-                  <span className="text-xs font-bold text-emerald-600 flex items-center justify-end gap-1 font-sans">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5 font-bold">Durumu</span>
+                  <span className="text-sm font-bold text-emerald-600 flex items-center justify-end gap-1.5 font-sans">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse animate-duration-1000" />
                     Doğrulandı
                   </span>
                 </div>
@@ -1278,9 +1301,9 @@ export default function App() {
 
               {/* Analyzed Post Preview */}
               <div className="mt-5">
-                <span className="text-[10px] text-purple-700 font-bold uppercase tracking-wider font-mono block mb-1">🔍 İncelenen Paylaşım Metni</span>
-                <div className="bg-slate-50/50 border-l-4 border-purple-500 p-3 rounded-r-xl">
-                  <p className="text-xs text-slate-700 italic leading-relaxed font-light line-clamp-3">
+                <span className="text-[11px] text-purple-700 font-black uppercase tracking-wider font-mono block mb-1.5">🔍 İNCELENEN PAYLAŞIM METNİ</span>
+                <div className="bg-slate-50 border-l-4 border-purple-500 p-4 rounded-r-xl">
+                  <p className="text-xs text-slate-700 italic leading-relaxed font-medium line-clamp-3">
                     "{inputText}"
                   </p>
                 </div>
@@ -1288,22 +1311,22 @@ export default function App() {
 
               {/* Reliability Index / Scale */}
               {analysis.guvenilirlikSkoru !== undefined && (
-                <div className="mt-6 bg-purple-50/40 border border-purple-100 p-5 rounded-2xl">
-                  <div className="flex justify-between items-center mb-2">
+                <div className="mt-5 bg-purple-50/50 border border-purple-100/80 p-5 rounded-2xl">
+                  <div className="flex justify-between items-center mb-2.5">
                     <div>
-                      <span className="text-[9px] text-purple-600 font-bold uppercase tracking-widest font-mono block">DOĞRULUK DERECESİ VE GÜVENİLİRLİK ENDEKSİ</span>
-                      <h4 className="text-md font-bold text-slate-900 mt-1 flex items-center gap-1.5">
+                      <span className="text-[9px] text-purple-700 font-black uppercase tracking-widest font-mono block">DOĞRULUK DERECESİ VE GÜVENİLİRLİK ENDEKSİ</span>
+                      <h4 className="text-sm font-bold text-slate-900 mt-1 flex items-center gap-2">
                         <span>İçerik Güvenilirlik Skoru:</span>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-extrabold ${
-                          analysis.guvenilirlikSkoru >= 75 ? "bg-emerald-100 text-emerald-800" :
-                          analysis.guvenilirlikSkoru >= 40 ? "bg-amber-100 text-amber-800" :
-                          "bg-rose-100 text-rose-800"
+                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-black ${
+                          analysis.guvenilirlikSkoru >= 75 ? "bg-emerald-100 text-emerald-800 border border-emerald-200" :
+                          analysis.guvenilirlikSkoru >= 40 ? "bg-amber-100 text-amber-800 border border-amber-200" :
+                          "bg-rose-100 text-rose-800 border border-rose-200"
                         }`}>
                           %{analysis.guvenilirlikSkoru}
                         </span>
                       </h4>
                     </div>
-                    <div className="text-[10px] font-bold max-w-xs text-right">
+                    <div className="text-xs font-black max-w-xs text-right">
                       {analysis.guvenilirlikSkoru >= 75 ? (
                         <span className="text-emerald-700">Yüksek Derecede Rasyonel & Güvenilir</span>
                       ) : analysis.guvenilirlikSkoru >= 40 ? (
@@ -1315,7 +1338,7 @@ export default function App() {
                   </div>
 
                   {/* Meter visual */}
-                  <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden p-[1px] relative mt-2">
+                  <div className="w-full bg-slate-200 h-3 rounded-full overflow-hidden p-[1px] relative mt-2 border border-slate-300/30">
                     <div 
                       className={`h-full rounded-full ${
                         analysis.guvenilirlikSkoru >= 75 ? "bg-emerald-500" :
@@ -1325,7 +1348,7 @@ export default function App() {
                       style={{ width: `${analysis.guvenilirlikSkoru}%` }}
                     />
                   </div>
-                  <div className="flex justify-between text-[8px] text-slate-400 mt-1 font-mono uppercase">
+                  <div className="flex justify-between text-[8px] text-slate-400 mt-1.5 font-mono uppercase font-bold">
                     <span>%0 Aşırı Dezenformasyon</span>
                     <span>%50 Eşik</span>
                     <span>%100 Doğrulanmış Veri</span>
@@ -1334,44 +1357,44 @@ export default function App() {
               )}
 
               {/* Assessment Section Details A4 grid */}
-              <div className="grid grid-cols-2 gap-4 mt-6">
+              <div className="grid grid-cols-2 gap-4 mt-5">
                 
                 {/* Metric 1 */}
-                <div className="border border-slate-100 bg-slate-50/30 p-4 rounded-xl flex flex-col">
-                  <div className="text-xs font-bold text-purple-700 mb-1.5 flex items-center gap-1 font-display">
+                <div className="border border-slate-200/60 bg-slate-50/50 p-4 rounded-xl flex flex-col justify-start">
+                  <div className="text-xs font-bold text-purple-700 mb-2 flex items-center gap-1 font-display uppercase tracking-wider">
                     <span>🎯</span> Hedef Kitle
                   </div>
-                  <p className="text-[11px] text-slate-700 leading-relaxed font-light flex-grow">
+                  <p className="text-[12.5px] text-slate-700 leading-relaxed font-normal flex-grow">
                     {analysis.hedefKitle.replace(/🎯\s*Hedef\s*Kitle:?\s*/gi, "")}
                   </p>
                 </div>
 
                 {/* Metric 2 */}
-                <div className="border border-slate-100 bg-slate-50/30 p-4 rounded-xl flex flex-col">
-                  <div className="text-xs font-bold text-blue-700 mb-1.5 flex items-center gap-1 font-display">
+                <div className="border border-slate-200/60 bg-slate-50/50 p-4 rounded-xl flex flex-col justify-start">
+                  <div className="text-xs font-bold text-blue-700 mb-2 flex items-center gap-1 font-display uppercase tracking-wider">
                     <span>💬</span> Dil Tonu
                   </div>
-                  <p className="text-[11px] text-slate-700 leading-relaxed font-light flex-grow">
+                  <p className="text-[12.5px] text-slate-700 leading-relaxed font-normal flex-grow">
                     {analysis.dilTonu.replace(/💬\s*Dil\s*Tonu:?\s*/gi, "")}
                   </p>
                 </div>
 
                 {/* Metric 3 */}
-                <div className="border border-slate-100 bg-slate-50/30 p-4 rounded-xl col-span-2 flex flex-col">
-                  <div className="text-xs font-bold text-pink-700 mb-1.5 flex items-center gap-1 font-display">
+                <div className="border border-slate-200/60 bg-slate-50/50 p-4 rounded-xl col-span-2 flex flex-col justify-start">
+                  <div className="text-xs font-bold text-pink-700 mb-2 flex items-center gap-1 font-display uppercase tracking-wider">
                     <span>🚫</span> Manipülatif Unsurlar
                   </div>
-                  <p className="text-[11px] text-slate-700 leading-relaxed font-light flex-grow text-justify">
+                  <p className="text-[12.5px] text-slate-700 leading-relaxed font-normal flex-grow text-justify">
                     {analysis.manipulatifUnsurlar.replace(/🚫\s*Manipülatif\s*Unsurlar:?\s*/gi, "")}
                   </p>
                 </div>
 
                 {/* Metric 4 */}
-                <div className="border border-slate-100 bg-slate-50/30 p-4 rounded-xl col-span-2 flex flex-col">
-                  <div className="text-xs font-bold text-emerald-700 mb-1.5 flex items-center gap-1 font-display">
+                <div className="border border-slate-200/60 bg-slate-50/50 p-4 rounded-xl col-span-2 flex flex-col justify-start">
+                  <div className="text-xs font-bold text-emerald-700 mb-2 flex items-center gap-1 font-display uppercase tracking-wider">
                     <span>⚖️</span> Genel Değerlendirme
                   </div>
-                  <p className="text-[11px] text-slate-700 leading-relaxed font-light flex-grow text-justify">
+                  <p className="text-[12.5px] text-slate-700 leading-relaxed font-normal flex-grow text-justify">
                     {analysis.genelDegerlendirme.replace(/⚖️\s*Genel\s*Değerlendirme:?\s*/gi, "")}
                   </p>
                 </div>
@@ -1380,11 +1403,11 @@ export default function App() {
             </div>
 
             {/* A4 Footer with brand & legal notes */}
-            <div className="border-t border-slate-200 pt-3 text-center">
-              <p className="text-[9px] text-slate-400 font-light leading-normal">
+            <div className="border-t border-slate-200 pt-4 text-center mt-4">
+              <p className="text-[9px] text-slate-500 font-medium leading-relaxed">
                 Bu analiz raporu <strong>Medyascope.AI</strong> siber-anlamsal denetim altyapısı ve yapay zeka entegrasyonu ile üretilmiştir.
               </p>
-              <p className="text-[8px] text-slate-400/80 font-mono mt-0.5">
+              <p className="text-[8px] text-slate-400 font-mono mt-1 font-bold">
                 © {new Date().getFullYear()} Medyascope. Tüm hakları saklıdır. Rapor tescili dijital imza ile taranmıştır.
               </p>
             </div>
