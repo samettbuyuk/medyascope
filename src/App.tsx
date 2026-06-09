@@ -277,7 +277,11 @@ export default function App() {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: "#ffffff"
+        backgroundColor: "#ffffff",
+        scrollX: 0,
+        scrollY: 0,
+        width: 794,
+        height: 1123
       });
       
       const imgData = canvas.toDataURL("image/jpeg", 0.95);
@@ -1205,7 +1209,19 @@ export default function App() {
 
       {/* Hidden high-contrast A4 template for PDF Generation */}
       {analysis && (
-        <div className="absolute top-[-9999px] left-[-9999px]" aria-hidden="true">
+        <div 
+          style={{ 
+            position: "fixed", 
+            top: 0, 
+            left: 0, 
+            width: "794px", 
+            height: "1123px", 
+            zIndex: -9999, 
+            pointerEvents: "none",
+            visibility: "visible"
+          }} 
+          aria-hidden="true"
+        >
           <div 
             ref={reportRef}
             className="w-[794px] h-[1123px] bg-white text-slate-900 p-10 flex flex-col justify-between font-sans relative"
