@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 
@@ -245,6 +244,7 @@ Lütfen kullanıcının şu sorusuna en uygun yanıtı ver:
 // Setup Vite or static serving
 async function setupVite() {
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
@@ -265,6 +265,10 @@ async function setupVite() {
   });
 }
 
-setupVite().catch((err) => {
-  console.error("Failed to boot Express+Vite application:", err);
-});
+if (!process.env.VERCEL) {
+  setupVite().catch((err) => {
+    console.error("Failed to boot Express+Vite application:", err);
+  });
+}
+
+export default app;
