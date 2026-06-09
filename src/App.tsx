@@ -1277,11 +1277,7 @@ export default function App() {
               </div>
 
               {/* Grid with Platform and Status */}
-              <div className="grid grid-cols-4 gap-4 bg-slate-50 border border-slate-200/60 p-4 rounded-xl mt-5">
-                <div>
-                  <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5 font-bold">Analiz Platformu</span>
-                  <span className="text-sm font-black text-purple-950 font-sans">{selectedPlatform === "X" ? "X (Twitter)" : selectedPlatform}</span>
-                </div>
+              <div className="grid grid-cols-3 gap-4 bg-slate-50 border border-slate-200/60 p-4 rounded-xl mt-5">
                 <div>
                   <span className="text-[9px] text-slate-500 block uppercase font-mono mb-0.5 font-bold">Metin Uzunluğu</span>
                   <span className="text-sm font-black text-slate-800 font-sans">{inputText.length} Karakter</span>
@@ -1301,7 +1297,7 @@ export default function App() {
 
               {/* Analyzed Post Preview */}
               <div className="mt-5">
-                <span className="text-[11px] text-purple-700 font-black uppercase tracking-wider font-mono block mb-1.5">🔍 İNCELENEN PAYLAŞIM METNİ</span>
+                <span className="text-[11px] text-purple-700 font-black uppercase tracking-wider font-mono block mb-1.5">İNCELENEN PAYLAŞIM METNİ:</span>
                 <div className="bg-slate-50 border-l-4 border-purple-500 p-4 rounded-r-xl">
                   <p className="text-xs text-slate-700 italic leading-relaxed font-medium line-clamp-3">
                     "{inputText}"
@@ -1314,7 +1310,7 @@ export default function App() {
                 <div className="mt-5 bg-purple-50/50 border border-purple-100/80 p-5 rounded-2xl">
                   <div className="flex justify-between items-center mb-2.5">
                     <div>
-                      <span className="text-[9px] text-purple-700 font-black uppercase tracking-widest font-mono block">DOĞRULUK DERECESİ VE GÜVENİLİRLİK ENDEKSİ</span>
+                      <span className="text-[9px] text-purple-700 font-black uppercase tracking-widest font-mono block">DOĞRULUK DERECESİ VE GÜVENİLİRLİK ENDEKSİ:</span>
                       <h4 className="text-sm font-bold text-slate-900 mt-1 flex items-center gap-2">
                         <span>İçerik Güvenilirlik Skoru:</span>
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-black ${
@@ -1361,8 +1357,8 @@ export default function App() {
                 
                 {/* Metric 1 */}
                 <div className="border border-slate-200/60 bg-slate-50/50 p-4 rounded-xl flex flex-col justify-start">
-                  <div className="text-xs font-bold text-purple-700 mb-2 flex items-center gap-1 font-display uppercase tracking-wider">
-                    <span>🎯</span> Hedef Kitle
+                  <div className="text-xs font-bold text-purple-700 mb-2 flex items-center font-display uppercase tracking-wider">
+                    HEDEF KİTLE:
                   </div>
                   <p className="text-[12.5px] text-slate-700 leading-relaxed font-normal flex-grow">
                     {analysis.hedefKitle.replace(/🎯\s*Hedef\s*Kitle:?\s*/gi, "")}
@@ -1371,8 +1367,8 @@ export default function App() {
 
                 {/* Metric 2 */}
                 <div className="border border-slate-200/60 bg-slate-50/50 p-4 rounded-xl flex flex-col justify-start">
-                  <div className="text-xs font-bold text-blue-700 mb-2 flex items-center gap-1 font-display uppercase tracking-wider">
-                    <span>💬</span> Dil Tonu
+                  <div className="text-xs font-bold text-blue-700 mb-2 flex items-center font-display uppercase tracking-wider">
+                    DİL TONU:
                   </div>
                   <p className="text-[12.5px] text-slate-700 leading-relaxed font-normal flex-grow">
                     {analysis.dilTonu.replace(/💬\s*Dil\s*Tonu:?\s*/gi, "")}
@@ -1381,8 +1377,8 @@ export default function App() {
 
                 {/* Metric 3 */}
                 <div className="border border-slate-200/60 bg-slate-50/50 p-4 rounded-xl col-span-2 flex flex-col justify-start">
-                  <div className="text-xs font-bold text-pink-700 mb-2 flex items-center gap-1 font-display uppercase tracking-wider">
-                    <span>🚫</span> Manipülatif Unsurlar
+                  <div className="text-xs font-bold text-pink-700 mb-2 flex items-center font-display uppercase tracking-wider">
+                    MANİPÜLATİF UNSURLAR:
                   </div>
                   <p className="text-[12.5px] text-slate-700 leading-relaxed font-normal flex-grow text-justify">
                     {analysis.manipulatifUnsurlar.replace(/🚫\s*Manipülatif\s*Unsurlar:?\s*/gi, "")}
@@ -1391,8 +1387,8 @@ export default function App() {
 
                 {/* Metric 4 */}
                 <div className="border border-slate-200/60 bg-slate-50/50 p-4 rounded-xl col-span-2 flex flex-col justify-start">
-                  <div className="text-xs font-bold text-emerald-700 mb-2 flex items-center gap-1 font-display uppercase tracking-wider">
-                    <span>⚖️</span> Genel Değerlendirme
+                  <div className="text-xs font-bold text-emerald-700 mb-2 flex items-center font-display uppercase tracking-wider">
+                    GENEL DEĞERLENDİRME:
                   </div>
                   <p className="text-[12.5px] text-slate-700 leading-relaxed font-normal flex-grow text-justify">
                     {analysis.genelDegerlendirme.replace(/⚖️\s*Genel\s*Değerlendirme:?\s*/gi, "")}
