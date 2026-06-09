@@ -1,0 +1,6 @@
+{
+  "name": "Sosyal Medya İçerik Analisti",
+  "description": "Sosyal medya paylaşımlarını analiz ederek hedef kitle, dil tonu, manipülatif unsurlar ve güvenilirlik değerlendirmesi sunan bir medya okuryazarlığı platformu.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

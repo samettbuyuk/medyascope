@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Flat, robust Light Mode Overrides (bombproof color contrast for all screens) */
+.theme-light {
+  background-color: #faf9fc !important;
+  color: #1a1525 !important;
+}
+
+.theme-light .bg-\[\#050208\] {
+  background-color: #faf9fc !important;
+}
+
+.theme-light .bg-[#050208] {
+  background-color: #faf9fc !important;
+}
+
+.theme-light .bg-white\/5 {
+  background-color: #ffffff !important;
+  border-color: rgba(147, 51, 234, 0.2) !important;
+  box-shadow: 0 4px 20px -2px rgba(109, 40, 217, 0.05), 0 2px 8px -1px rgba(0, 0, 0, 0.02) !important;
+}
+
+.theme-light .bg-white\/10 {
+  background-color: #ffffff !important;
+  border-color: rgba(147, 51, 234, 0.25) !important;
+}
+
+.theme-light .bg-black\/40 {
+  background-color: #f5effc !important;
+  border-color: rgba(147, 51, 234, 0.15) !important;
+  color: #1a102f !important;
+}
+
+.theme-light .bg-black\/60 {
+  background-color: #f1ecf7 !important;
+  border-color: rgba(147, 51, 234, 0.18) !important;
+}
+
+.theme-light .bg-black\/80 {
+  background-color: #faf9fc !important;
+  border-color: rgba(147, 51, 234, 0.2) !important;
+}
+
+.theme-light .bg-black\/20 {
+  background-color: #ffffff !important;
+  border-color: rgba(147, 51, 234, 0.15) !important;
+}
+
+.theme-light .border-white\/10 {
+  border-color: rgba(147, 51, 234, 0.22) !important;
+}
+
+.theme-light .border-white\/5 {
+  border-color: rgba(147, 51, 234, 0.12) !important;
+}
+
+.theme-light .bg-white\/2 {
+  background-color: #ffffff !important;
+  border-color: rgba(147, 51, 234, 0.15) !important;
+}
+
+.theme-light .bg-\[\#0b0412\] {
+  background-color: #ffffff !important;
+  border-color: rgba(147, 51, 234, 0.25) !important;
+  box-shadow: 0 10px 30px rgba(147, 51, 234, 0.08) !important;
+}
+
+/* High Contrast Global Text Color overrides inside theme-light */
+.theme-light h1, 
+.theme-light h2, 
+.theme-light h3, 
+.theme-light h4, 
+.theme-light h5, 
+.theme-light h6,
+.theme-light .text-white,
+.theme-light .text-slate-50,
+.theme-light .text-slate-100 {
+  color: #130a21 !important;
+}
+
+.theme-light .text-slate-200,
+.theme-light .text-gray-200,
+.theme-light .text-zinc-200 {
+  color: #1c1130 !important;
+}
+
+.theme-light .text-slate-350,
+.theme-light .text-slate-300,
+.theme-light .text-gray-300,
+.theme-light .text-zinc-300 {
+  color: #271a3d !important;
+}
+
+.theme-light .text-gray-300,
+.theme-light .text-slate-400,
+.theme-light .text-gray-400,
+.theme-light .text-zinc-400,
+.theme-light .text-gray-350,
+.theme-light .text-gray-405,
+.theme-light .text-gray-450 {
+  color: #271a3d !important;
+}
+
+.theme-light .text-gray-500,
+.theme-light .text-slate-500,
+.theme-light .text-zinc-500 {
+  color: #4b3d68 !important;
+}
+
+.theme-light .italic {
+  color: #3b2d56 !important;
+}
+
+/* Ensure rich, readable colors on interactive hovers inside theme-light */
+.theme-light .hover\:text-white:hover,
+.theme-light .group-hover\:text-white {
+  color: #130a21 !important;
+}
+
+.theme-light .hover\:text-slate-300:hover,
+.theme-light .group-hover\:text-slate-300 {
+  color: #1c1130 !important;
+}
+
+/* Ensure text is strictly white for containers with vibrant/dark gradients or solid colors in light mode */
+.theme-light .bg-gradient-to-r,
+.theme-light .bg-gradient-to-tr,
+.theme-light .bg-gradient-to-br,
+.theme-light .bg-purple-600,
+.theme-light .bg-pink-600 {
+  color: #ffffff !important;
+}
+
+.theme-light .bg-gradient-to-r *,
+.theme-light .bg-gradient-to-tr *,
+.theme-light .bg-gradient-to-br *,
+.theme-light .bg-purple-600 *,
+.theme-light .bg-pink-600 * {
+  color: #ffffff !important;
+}
+
+/* Dynamic status levels & specific title colors to avoid washed-out texts */
+.theme-light .text-purple-300,
+.theme-light .text-purple-400 {
+  color: #6d28d9 !important;
+}
+
+.theme-light .text-blue-300,
+.theme-light .text-blue-400 {
+  color: #1d4ed8 !important;
+}
+
+.theme-light .text-pink-300,
+.theme-light .text-pink-400 {
+  color: #db2777 !important;
+}
+
+.theme-light .text-emerald-300,
+.theme-light .text-emerald-400 {
+  color: #047857 !important;
+}
+
+.theme-light .text-teal-300,
+.theme-light .text-teal-400 {
+  color: #0f766e !important;
+}
+
+.theme-light .text-amber-300,
+.theme-light .text-amber-400 {
+  color: #b45309 !important;
+}
+
+.theme-light .text-rose-300,
+.theme-light .text-rose-400,
+.theme-light .text-red-400 {
+  color: #be123c !important;
+}
+
+/* Interactive discussion box bubbles */
+.theme-light .bg-purple-950\/40 {
+  background-color: rgba(147, 51, 234, 0.07) !important;
+  border-color: rgba(147, 51, 234, 0.2) !important;
+}
+
+.theme-light .bg-purple-900\/20 {
+  background-color: rgba(147, 51, 234, 0.05) !important;
+  border-color: rgba(147, 51, 234, 0.15) !important;
+}
+
+.theme-light .bg-\[\#0b0412\] {
+  background-color: #ffffff !important;
+}
+
+.theme-light .bg-black\/30 {
+  background-color: #f7f5fa !important;
+  border-color: rgba(147, 51, 234, 0.12) !important;
+}
+
+/* Form inputs & textareas */
+.theme-light textarea,
+.theme-light input[type="text"] {
+  background-color: #ffffff !important;
+  color: #130a21 !important;
+  border-color: rgba(147, 51, 234, 0.25) !important;
+  box-shadow: inset 0 2px 4px rgba(109, 40, 217, 0.02) !important;
+}
+
+.theme-light textarea::placeholder,
+.theme-light input[type="text"]::placeholder {
+  color: #7b6f95 !important;
+}
+
+/* Gradient text adjustments in light mode so it remains beautifully visible to the eye */
+.theme-light .bg-gradient-to-r.from-purple-400.via-pink-400 {
+  background-image: linear-gradient(to right, #5b21b6, #db2777) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+.theme-light .from-white.via-slate-100 {
+  background-image: linear-gradient(to right, #111827, #374151) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* Background gradient glows control */
+.theme-light .bg-purple-700\/20 {
+  background-color: rgba(147, 51, 234, 0.04) !important;
+}
+
+.theme-light .bg-pink-700\/10 {
+  background-color: rgba(236, 72, 153, 0.03) !important;
+}
+
+.theme-light .bg-indigo-700\/10 {
+  background-color: rgba(99, 102, 241, 0.03) !important;
+}
+
+.theme-light .border-purple-500\/10,
+.theme-light .border-purple-500\/20 {
+  border-color: rgba(147, 51, 234, 0.2) !important;
+}
+
+/* Footer elements */
+.theme-light footer {
+  background-color: #ffffff !important;
+  border-top: 1px solid rgba(147, 51, 234, 0.12) !important;
+  color: #4b3e66 !important;
+}
+
+.theme-light footer button,
+.theme-light footer a {
+  color: #51446f !important;
+}
+
+.theme-light footer button:hover,
+.theme-light footer a:hover {
+  color: #6d28d9 !important;
+}
+
+/* Warning / Error Alert Overrides in Light Mode */
+.theme-light .bg-red-950\/25 {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+}
+
+.theme-light .border-red-500\/30 {
+  border-color: #fca5a5 !important;
+}
+
+.theme-light .text-red-300 {
+  color: #991b1b !important;
+}
+
+.theme-light .text-red-400 {
+  color: #df2020 !important;
+}
+
+
